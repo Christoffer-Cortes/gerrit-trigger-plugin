@@ -553,7 +553,6 @@ public class GerritMissedEventsPlaybackManager implements ConnectionListener, Na
 
     /**
      * Responsible for persisting timestamps to xml.
-     * Time slices jump by 1000ms so the thread only checks every 1 second.
      */
     static class GerritMissedEventsPlaybackPersistRunnable implements Runnable {
         private static String serverName;
@@ -562,14 +561,14 @@ public class GerritMissedEventsPlaybackManager implements ConnectionListener, Na
 
         /**
          * Constructor.
-         * @param serverName name of server to persist timestamps for.
+         * @param serverName server that will persist timestamps
          */
         public GerritMissedEventsPlaybackPersistRunnable(String serverName) {
             GerritMissedEventsPlaybackPersistRunnable.serverName = serverName;
         }
 
         /**
-         * Start the persistence thread loop.
+         * Start the persistence thread.
          */
         public void start() {
             worker = new Thread(this);
@@ -577,12 +576,16 @@ public class GerritMissedEventsPlaybackManager implements ConnectionListener, Na
         }
 
         /**
-         * Interrupt the persistence thread loop.
+         * Interrupt the persistence thread.
          */
         public void interrupt() {
             worker.interrupt();
         }
 
+        /**
+         * Check if thread is running.
+         * @return true if thread is running
+         */
         public boolean isRunning() {
             return running.get();
         }
